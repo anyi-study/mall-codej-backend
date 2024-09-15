@@ -198,6 +198,64 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager>
         managerMapper.updateById(manager);
     }
 
+    @Override
+    public Boolean updateManager(Integer id,String username, String password, Integer roleId, Integer status, String avatar, String token) {
+        // 检查用户名是否已存在
+        QueryWrapper<Manager> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        Manager existingManager = managerMapper.selectOne(queryWrapper);
+        if (existingManager != null && !existingManager.getId().equals(id)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "username已存在");
+        }
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());// 加密处理
+
+        // 更新管理员信息
+        Manager manager = new Manager();
+        manager.setId(id);
+        manager.setUsername(username);
+        manager.setPassword(encryptPassword);
+        manager.setRoleId(roleId);
+        manager.setStatus(status);
+        manager.setAvatar(avatar);
+        int i = managerMapper.updateById(manager);
+        if (i == 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * 删除管理员
+     * @param id
+     * @param token
+     * @return
+     */
+    @Override
+    public boolean deleteManager(Integer id, String token) {
+//        判空
+        if (id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return managerMapper.deleteById(id) > 0;
+    }
+
+    /**
+     * 修改管理员状态
+     * @param id
+     * @param token
+     * @return
+     */
+    @Override
+    public boolean updateManagerStatus(Integer id, String token) {
+//        查询id的信息
+        Manager manager = managerMapper.selectById(id);
+        if (manager == null) {
+            throw new BusinessException(ErrorCode.ID_ERROR);
+        }
+        manager.setStatus(manager.getStatus() == 0 ? 1 : 0);
+        return managerMapper.updateById(manager) > 0;
+    }
+
     /**
      * 用户注册
      * @param username

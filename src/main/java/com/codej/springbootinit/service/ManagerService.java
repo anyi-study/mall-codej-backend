@@ -81,4 +81,32 @@ public interface ManagerService extends IService<Manager> {
      * @param newPassword
      */
     void updatePassword(String username, String oldpassword, String newPassword);
+
+    /**
+     * 修改管理员信息
+     * @param username
+     * @param password
+     * @param roleId
+     * @param status
+     * @param avatar
+     * @param token
+     * @return
+     */
+    Boolean updateManager(Integer id,String username, String password, Integer roleId, Integer status, String avatar, String token);
+
+    /**
+     * 删除管理员
+     * @param id
+     * @param token
+     * @return
+     */
+    boolean deleteManager(Integer id, String token);
+
+    /**
+     * 修改管理员状态
+     * @param id
+     * @param token
+     * @return
+     */
+    boolean updateManagerStatus(Integer id, String token);
 }

@@ -1,18 +1,15 @@
 package com.codej.springbootinit.controller.admin;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codej.springbootinit.common.BaseResponse;
 import com.codej.springbootinit.common.ErrorCode;
 import com.codej.springbootinit.common.ResultUtils;
 import com.codej.springbootinit.exception.BusinessException;
-import com.codej.springbootinit.mapper.RoleMapper;
 import com.codej.springbootinit.model.dto.manager.AdminLoginRequest;
 import com.codej.springbootinit.model.dto.manager.ManagerRegisterRequest;
+import com.codej.springbootinit.model.dto.manager.UpdateManagerRequest;
 import com.codej.springbootinit.model.dto.manager.UpdatePasswordManager;
 import com.codej.springbootinit.model.entity.Manager;
 import com.codej.springbootinit.model.entity.ManagerPageResponse;
-import com.codej.springbootinit.model.entity.Role;
 import com.codej.springbootinit.model.vo.ManagerVO;
 import com.codej.springbootinit.model.vo.UserPermissionsResponse;
 import com.codej.springbootinit.service.ManagerService;
@@ -21,14 +18,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Api(value = "管理员接口")
@@ -38,6 +32,111 @@ import java.util.Map;
 public class ManagerController {
     @Resource
     private ManagerService managerService;
+    @ApiOperation("修改管理员状态")
+    @PostMapping("/{id}/update_status")
+    public BaseResponse<Boolean> updateManagerStatus(
+            @PathVariable("id") Integer id,
+            @RequestHeader("token") String token) {
+//        参数校验及身份验证
+        if (id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String tokenUsername = JwtUtil.extractUsername(token);
+        if (tokenUsername == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
+        if (JwtUtil.isTokenExpired(token)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "token过期");
+        }
+
+        // 验证 token 或获取用户信息（示例中略过）
+//        根据username获取用户信息 todo 验证超级管理员
+        Manager tokenManager = managerService.getByName(tokenUsername);
+        if (tokenManager == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 调用服务层方法修改用户状态
+        boolean success = managerService.updateManagerStatus(id, token);
+        // 返回成功响应
+        if (!success){
+            return ResultUtils.error(ErrorCode.ID_ERROR);
+        }
+        return ResultUtils.success(true);
+    }
+    @ApiOperation("删除管理员")
+    @PostMapping("/{id}/delete")
+    public BaseResponse<Boolean> deleteManager(
+            @PathVariable("id") Integer id,
+            @RequestHeader("token") String token) {
+//        参数校验及身份验证
+        if (id == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String tokenUsername = JwtUtil.extractUsername(token);
+        if (tokenUsername == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
+        if (JwtUtil.isTokenExpired(token)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "token过期");
+        }
+
+        // 验证 token 或获取用户信息（示例中略过）
+//        根据username获取用户信息 todo 验证超级管理员
+        Manager tokenManager = managerService.getByName(tokenUsername);
+        if (tokenManager == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 调用服务层方法修改用户
+        boolean success = managerService.deleteManager(id, token);
+        // 返回成功响应
+        if (!success){
+            return ResultUtils.error(ErrorCode.ID_ERROR);
+        }
+        return ResultUtils.success(true);
+    }
+
+    @ApiOperation("修改管理员信息")
+    @PostMapping("/manager/{id}")
+    public BaseResponse<Boolean> updateManager(
+            @PathVariable("id") Integer id,
+            @RequestHeader("token") String token,
+            @RequestBody UpdateManagerRequest updateManagerRequest) {
+
+        String username = updateManagerRequest.getUsername();
+        String password = updateManagerRequest.getPassword();
+        String avatar = updateManagerRequest.getAvatar();
+        Integer roleId = updateManagerRequest.getRoleId();
+        Integer status = updateManagerRequest.getStatus();
+//        参数校验及身份验证
+        if (id == null || avatar==null||username == null || password == null || roleId == null || status == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (username.length() < 4 || password.length() < 8) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        String tokenUsername = JwtUtil.extractUsername(token);
+        if (tokenUsername == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
+        if (JwtUtil.isTokenExpired(token)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "token过期");
+        }
+
+        // 验证 token 或获取用户信息（示例中略过）
+//        根据username获取用户信息 todo 验证超级管理员
+        Manager tokenManager = managerService.getByName(tokenUsername);
+        if (tokenManager == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 调用服务层方法修改用户
+        boolean success = managerService.updateManager(id,username, password, roleId, status, avatar, token);
+        // 返回成功响应
+        return ResultUtils.success(success);
+    }
 
     /**
      * 退出登录
