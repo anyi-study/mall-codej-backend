@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codej.springbootinit.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.codej.springbootinit.model.entity.Role">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="INTEGER"/>
+            <result property="updateTime" column="update_time" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="desc" column="desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,status,create_time,
+        update_time,name,desc
+    </sql>
+    <select id="selectRoleById" resultType="com.codej.springbootinit.model.entity.Role">
+        SELECT id, status, create_time, update_time, name, `desc`
+        FROM role
+        WHERE id = #{id}
+    </select>
+    <!-- 查询所有角色 -->
+    <select id="selectAllRoles" resultType="com.codej.springbootinit.model.entity.Role">
+        SELECT
+        id,
+        status,
+        create_time,
+        update_time,
+        name,
+        `desc`
+        FROM role
+    </select>
+</mapper>
