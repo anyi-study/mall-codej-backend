@@ -1,8 +1,10 @@
 package com.codej.springbootinit.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.codej.springbootinit.common.PageResponse;
 import com.codej.springbootinit.model.entity.Manager;
 import com.codej.springbootinit.model.entity.ManagerPageResponse;
+import com.codej.springbootinit.model.vo.ManagerPageVo;
 import com.codej.springbootinit.model.vo.ManagerVO;
 import com.codej.springbootinit.model.vo.UserPermissionsResponse;
 
@@ -53,7 +55,34 @@ public interface ManagerService extends IService<Manager> {
      * @param keyword
      * @return
      */
-    ManagerPageResponse getManagers(Integer page, Integer limit, String keyword);
+//    ManagerPageResponse getManagers(Integer page, Integer limit, String keyword);
+
+    //    @Override
+//    public ManagerPageResponse getManagers(Integer page, Integer limit, String keyword) {
+//        // 设置分页
+//        Page<Manager> managerPage = new Page<>(page, limit);
+//
+//        // 查询条件
+//        QueryWrapper<Manager> queryWrapper = new QueryWrapper<>();
+//        if (keyword != null && !keyword.trim().isEmpty()) {
+//            queryWrapper.lambda().like(Manager::getUsername, keyword);
+//        }
+//
+//        // 查询管理员数据
+//        Page<Manager> resultPage = managerMapper.selectPage(managerPage, queryWrapper);
+//
+//        // 查询角色信息
+//        List<Role> roles = roleMapper.selectAllRoles();  // 使用新方法
+//
+//        // 构建响应数据
+//        ManagerPageResponse response = new ManagerPageResponse();
+//        response.setList(resultPage.getRecords());
+//        response.setTotalCount(resultPage.getTotal());
+//        response.setRoles(roles);
+//
+//        return response;
+//    }
+    ManagerPageVo getManagers(int page, int limit, String keyword);
 
     /**
      * 根据用户名获取管理员信息

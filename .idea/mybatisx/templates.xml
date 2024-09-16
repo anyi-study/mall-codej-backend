@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Rule" />
-                  <option name="tableName" value="rule" />
+                  <option name="className" value="ImageClass" />
+                  <option name="tableName" value="image_class" />
                 </TableUIInfo>
               </list>
             </option>

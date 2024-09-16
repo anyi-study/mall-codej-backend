@@ -2,6 +2,7 @@ package com.codej.springbootinit.controller.admin;
 
 import com.codej.springbootinit.common.BaseResponse;
 import com.codej.springbootinit.common.ErrorCode;
+import com.codej.springbootinit.common.PageResponse;
 import com.codej.springbootinit.common.ResultUtils;
 import com.codej.springbootinit.exception.BusinessException;
 import com.codej.springbootinit.model.dto.manager.AdminLoginRequest;
@@ -10,6 +11,7 @@ import com.codej.springbootinit.model.dto.manager.UpdateManagerRequest;
 import com.codej.springbootinit.model.dto.manager.UpdatePasswordManager;
 import com.codej.springbootinit.model.entity.Manager;
 import com.codej.springbootinit.model.entity.ManagerPageResponse;
+import com.codej.springbootinit.model.vo.ManagerPageVo;
 import com.codej.springbootinit.model.vo.ManagerVO;
 import com.codej.springbootinit.model.vo.UserPermissionsResponse;
 import com.codej.springbootinit.service.ManagerService;
@@ -32,6 +34,7 @@ import java.util.Map;
 public class ManagerController {
     @Resource
     private ManagerService managerService;
+
     @ApiOperation("修改管理员状态")
     @PostMapping("/{id}/update_status")
     public BaseResponse<Boolean> updateManagerStatus(
@@ -59,11 +62,12 @@ public class ManagerController {
         // 调用服务层方法修改用户状态
         boolean success = managerService.updateManagerStatus(id, token);
         // 返回成功响应
-        if (!success){
+        if (!success) {
             return ResultUtils.error(ErrorCode.ID_ERROR);
         }
         return ResultUtils.success(true);
     }
+
     @ApiOperation("删除管理员")
     @PostMapping("/{id}/delete")
     public BaseResponse<Boolean> deleteManager(
@@ -91,7 +95,7 @@ public class ManagerController {
         // 调用服务层方法修改用户
         boolean success = managerService.deleteManager(id, token);
         // 返回成功响应
-        if (!success){
+        if (!success) {
             return ResultUtils.error(ErrorCode.ID_ERROR);
         }
         return ResultUtils.success(true);
@@ -110,7 +114,7 @@ public class ManagerController {
         Integer roleId = updateManagerRequest.getRoleId();
         Integer status = updateManagerRequest.getStatus();
 //        参数校验及身份验证
-        if (id == null || avatar==null||username == null || password == null || roleId == null || status == null) {
+        if (id == null || avatar == null || username == null || password == null || roleId == null || status == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         if (username.length() < 4 || password.length() < 8) {
@@ -133,13 +137,14 @@ public class ManagerController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 调用服务层方法修改用户
-        boolean success = managerService.updateManager(id,username, password, roleId, status, avatar, token);
+        boolean success = managerService.updateManager(id, username, password, roleId, status, avatar, token);
         // 返回成功响应
         return ResultUtils.success(success);
     }
 
     /**
      * 退出登录
+     *
      * @param token
      * @return
      */
@@ -161,6 +166,7 @@ public class ManagerController {
 
     /**
      * 当前用户修改密码
+     *
      * @param token
      * @param updatePasswordManager
      * @return
@@ -174,7 +180,7 @@ public class ManagerController {
         String oldpassword = updatePasswordManager.getOldpassword();
         String repassword = updatePasswordManager.getRepassword();
         // 参数校验
-        if ( newPassword == null || oldpassword == null
+        if (newPassword == null || oldpassword == null
                 || repassword == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -184,7 +190,7 @@ public class ManagerController {
         }
         // 新密码和旧密码不能相同
         if (oldpassword.equals(newPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"新密码和旧密码不能相同");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "新密码和旧密码不能相同");
         }
         // 检查新密码与重复密码是否一致
         if (!newPassword.equals(repassword)) {
@@ -205,8 +211,10 @@ public class ManagerController {
         // 返回成功响应
         return ResultUtils.success("密码修改成功");
     }
+
     /**
      * 添加管理员
+     *
      * @param token
      * @param username
      * @param password
@@ -259,6 +267,7 @@ public class ManagerController {
 
     /**
      * 管理员获取管理员信息
+     *
      * @param token
      * @param page
      * @param limit
@@ -268,34 +277,76 @@ public class ManagerController {
      */
     @ApiOperation("获取管理员信息")
     @GetMapping("/{page}")
-    public BaseResponse<ManagerPageResponse> getManagers(@RequestHeader(value = "token") String token,
-            @PathVariable("page") Integer page,
-            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            HttpServletRequest request) {
+    public BaseResponse<ManagerPageVo> getManagers(@RequestHeader(value = "token") String token,
+                                                    @PathVariable("page") Integer page,
+                                                    @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+                                                    @RequestParam(value = "keyword", required = false) String keyword,
+                                                    HttpServletRequest request) {
 
         // 获取请求头中的 token
         String username = JwtUtil.extractUsername(token);
         if (username == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
-        // 验证 token 或获取用户信息（示例中略过）
-//        根据username获取用户信息
+
         Manager manager = managerService.getByName(username);
         if (manager == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        //        请求参数校验
         if (page <= 0 || limit <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 调用服务层方法
-        ManagerPageResponse response = managerService.getManagers(page, limit, keyword);
+
+        // 调用服务层方法获取分页数据
+        ManagerPageVo managerPageVo = managerService.getManagers(page, limit, keyword);
 
         // 返回成功响应
-        return ResultUtils.success(response);
+        return ResultUtils.success(managerPageVo);
     }
+
+
+
+    /**
+     * 管理员获取管理员信息
+     *
+     * @param token
+     * @param page
+     * @param limit
+     * @param keyword
+     * @param request
+     * @return
+     */
+//    @ApiOperation("获取管理员信息")
+//    @GetMapping("/{page}")
+//    public BaseResponse<ManagerPageResponse> getManagers(@RequestHeader(value = "token") String token,
+//                                                         @PathVariable("page") Integer page,
+//                                                         @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+//                                                         @RequestParam(value = "keyword", required = false) String keyword,
+//                                                         HttpServletRequest request) {
+//
+//        // 获取请求头中的 token
+//        String username = JwtUtil.extractUsername(token);
+//        if (username == null) {
+//            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+//        }
+//        // 验证 token 或获取用户信息（示例中略过）
+////        根据username获取用户信息
+//        Manager manager = managerService.getByName(username);
+//        if (manager == null) {
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
+//
+//        //        请求参数校验
+//        if (page <= 0 || limit <= 0) {
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
+//        // 调用服务层方法
+//        ManagerPageResponse response = managerService.getManagers(page, limit, keyword);
+//
+//        // 返回成功响应
+//        return ResultUtils.success(response);
+//    }
 
     @ApiOperation("获取权限")
     @PostMapping("/getinfo")

@@ -1,18 +1,21 @@
 package com.codej.springbootinit.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codej.springbootinit.common.ErrorCode;
+import com.codej.springbootinit.common.PageResponse;
 import com.codej.springbootinit.exception.BusinessException;
 import com.codej.springbootinit.mapper.ManagerMapper;
 import com.codej.springbootinit.mapper.RoleMapper;
 import com.codej.springbootinit.mapper.RoleRuleMapper;
 import com.codej.springbootinit.mapper.RuleMapper;
 import com.codej.springbootinit.model.entity.Manager;
-import com.codej.springbootinit.model.entity.ManagerPageResponse;
 import com.codej.springbootinit.model.entity.Role;
 import com.codej.springbootinit.model.enums.Menu;
+import com.codej.springbootinit.model.vo.ManagerPageVo;
 import com.codej.springbootinit.model.vo.ManagerVO;
 import com.codej.springbootinit.model.vo.UserPermissionsResponse;
 import com.codej.springbootinit.service.ManagerService;
@@ -26,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static com.codej.springbootinit.constant.UserConstant.USER_LOGIN_STATE;
 
@@ -104,31 +104,47 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager>
      * @param keyword
      * @return
      */
+//    @Override
+//    public ManagerPageResponse getManagers(Integer page, Integer limit, String keyword) {
+//        // 设置分页
+//        Page<Manager> managerPage = new Page<>(page, limit);
+//
+//        // 查询条件
+//        QueryWrapper<Manager> queryWrapper = new QueryWrapper<>();
+//        if (keyword != null && !keyword.trim().isEmpty()) {
+//            queryWrapper.lambda().like(Manager::getUsername, keyword);
+//        }
+//
+//        // 查询管理员数据
+//        Page<Manager> resultPage = managerMapper.selectPage(managerPage, queryWrapper);
+//
+//        // 查询角色信息
+//        List<Role> roles = roleMapper.selectAllRoles();  // 使用新方法
+//
+//        // 构建响应数据
+//        ManagerPageResponse response = new ManagerPageResponse();
+//        response.setList(resultPage.getRecords());
+//        response.setTotalCount(resultPage.getTotal());
+//        response.setRoles(roles);
+//
+//        return response;
+//    }
     @Override
-    public ManagerPageResponse getManagers(Integer page, Integer limit, String keyword) {
-        // 设置分页
+    public ManagerPageVo getManagers(int page, int limit, String keyword) {
+        // 调用MyBatis-Plus进行分页查询
+        // 示例代码，具体实现需要根据实际数据库和业务逻辑调整
         Page<Manager> managerPage = new Page<>(page, limit);
-
-        // 查询条件
-        QueryWrapper<Manager> queryWrapper = new QueryWrapper<>();
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            queryWrapper.lambda().like(Manager::getUsername, keyword);
+        LambdaQueryWrapper<Manager> queryWrapper = new LambdaQueryWrapper<>();
+        if (keyword != null && !keyword.isEmpty()) {
+            queryWrapper.like(Manager::getUsername, keyword);
         }
-
-        // 查询管理员数据
-        Page<Manager> resultPage = managerMapper.selectPage(managerPage, queryWrapper);
-
+        IPage<Manager> result = managerMapper.selectPage(managerPage, queryWrapper);
         // 查询角色信息
         List<Role> roles = roleMapper.selectAllRoles();  // 使用新方法
-
-        // 构建响应数据
-        ManagerPageResponse response = new ManagerPageResponse();
-        response.setList(resultPage.getRecords());
-        response.setTotalCount(resultPage.getTotal());
-        response.setRoles(roles);
-
-        return response;
+        // 返回分页数据
+        return new ManagerPageVo(result.getRecords(), result.getTotal(),roles);
     }
+
 
     /**
      * 根据用户名查询管理员信息
