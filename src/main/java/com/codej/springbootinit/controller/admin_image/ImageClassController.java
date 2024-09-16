@@ -6,8 +6,6 @@ import com.codej.springbootinit.common.PageResponse;
 import com.codej.springbootinit.common.ResultUtils;
 import com.codej.springbootinit.exception.BusinessException;
 import com.codej.springbootinit.model.dto.admin_image.ImageClassRequest;
-import com.codej.springbootinit.model.entity.Manager;
-import com.codej.springbootinit.model.entity.ManagerPageResponse;
 import com.codej.springbootinit.model.entity.image.Image;
 import com.codej.springbootinit.model.entity.image.ImageClass;
 import com.codej.springbootinit.service.ImageClassService;
@@ -19,13 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-@Api(value = "图片接口")
+@Api(value = "图库分类接口")
 @RestController
 @RequestMapping("/image_class")
 @Slf4j
-public class ImageController {
+public class ImageClassController {
     @Autowired
     private ImageService imageService;
     @Autowired

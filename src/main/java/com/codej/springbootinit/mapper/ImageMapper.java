@@ -7,6 +7,7 @@ import com.codej.springbootinit.model.dto.admin_image.ImageCountDTO;
 import com.codej.springbootinit.model.entity.image.Image;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,15 @@ public interface ImageMapper extends BaseMapper<Image> {
      */
     @Select("SELECT * FROM image WHERE image_class_id = #{imageClassId}")
     IPage<Image> selectImagesByClassId(Page<Image> page, @Param("imageClassId") Long imageClassId);
+
+    /**
+     * 更新图片名称
+     * @param imageId
+     * @param name
+     * @return
+     */
+    @Update("UPDATE image SET name = #{name} WHERE id = #{imageId}")
+    int updateImageName(Integer imageId, String name);
 }
 
 
