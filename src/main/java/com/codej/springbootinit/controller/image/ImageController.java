@@ -62,6 +62,11 @@ public class ImageController {
     @ApiOperation("删除图片")
     @PostMapping("/delete_all")
     public ResponseEntity<?> deleteImages(@RequestHeader("token") String token, @RequestBody Map<String, List<Integer>> requestBody) {
+        // 验证 token
+        String username = JwtUtil.extractUsername(token);
+        if (username == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
         List<Integer> ids = requestBody.get("ids");
         if (ids == null || ids.isEmpty()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "No image IDs provided");
@@ -80,8 +85,12 @@ public class ImageController {
             @RequestHeader("token") String token,
             @PathVariable("id") Integer imageId,
             @RequestParam("name") String name) {
-
-        // 假设 imageService.updateImageName() 更新图片名称并返回是否成功
+        // 验证 token
+        String username = JwtUtil.extractUsername(token);
+        if (username == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        // imageService.updateImageName() 更新图片名称并返回是否成功
         boolean result = imageService.updateImageName(imageId, name);
 
         // 创建响应的 Map
