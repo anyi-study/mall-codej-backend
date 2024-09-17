@@ -81,6 +81,7 @@ public class Rule implements Serializable {
     @TableField(value = "order")
     private Integer order;
 
+
     /**
      * 图标
      */

@@ -25,6 +25,12 @@ public class SkusController {
     @Autowired
     private SkusService skusService;
 
+    /**
+     * 删除规格
+     * @param ids
+     * @param token
+     * @return
+     */
     @ApiOperation("删除规格")
     @PostMapping("/delete_all")
     public BaseResponse<Integer> deleteSkus(@RequestBody List<Integer> ids,
