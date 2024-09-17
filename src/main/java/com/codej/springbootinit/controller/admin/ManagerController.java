@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
 
-@Api(value = "管理员接口")
+@Api(tags  = "管理员接口")
 @RestController
 @RequestMapping("/admin")
 @Slf4j

@@ -54,8 +54,8 @@ public class Rule implements Serializable {
     /**
      * 前端路由name值
      */
-    @TableField(value = "desc")
-    private String desc;
+    @TableField(value = "description")
+    private String description;
 
     /**
      * 前台路由注册路径

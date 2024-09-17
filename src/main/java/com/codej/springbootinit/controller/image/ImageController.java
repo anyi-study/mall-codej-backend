@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "图库管理")
+@Api(tags = "图库管理")
 @RestController
 @RequestMapping("/image")
 @Slf4j

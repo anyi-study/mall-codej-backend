@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 角色表
@@ -31,13 +32,13 @@ public class Role implements Serializable {
      * 创建时间
      */
     @TableField(value = "create_time")
-    private Integer createTime;
+    private Long createTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "update_time")
-    private Integer updateTime;
+    private Long updateTime;
 
     /**
      * 角色名称
@@ -48,8 +49,13 @@ public class Role implements Serializable {
     /**
      * 描述
      */
-    @TableField(value = "desc")
-    private String desc;
+    @TableField(value = "description")
+    private String description;
+    /**
+     * 关联的规则列表
+     */
+    @TableField(exist = false) // 表示这个字段在数据库表中不存在
+    private List<Rule> rules; // 关联的规则列表
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

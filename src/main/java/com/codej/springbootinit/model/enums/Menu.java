@@ -10,7 +10,7 @@ public class Menu {
     private String createTime;
     private String updateTime;
     private String name;
-    private String desc;
+    private String description;
     private String frontpath;
     private String condition;
     private Integer menu;

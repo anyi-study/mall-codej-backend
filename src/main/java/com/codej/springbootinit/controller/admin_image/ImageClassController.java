@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(value = "图库分类接口")
+@Api(tags = "图库分类接口")
 @RestController
 @RequestMapping("/image_class")
 @Slf4j

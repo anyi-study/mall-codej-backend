@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Api("公告接口")
+@Api(tags = "公告接口")
 @RequestMapping("/admin/notice")
 public class NoticeController {
 

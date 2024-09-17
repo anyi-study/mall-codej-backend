@@ -186,7 +186,10 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager>
         manager.setUpdateTime(manager.getCreateTime());      // 设置更新时间戳
 
         // 插入数据库
-        managerMapper.insert(manager);
+        int insert = managerMapper.insert(manager);
+        if (insert <= 0){
+            throw new BusinessException(ErrorCode.OPERATION_ERROR,"添加管理员失败");
+        }
         return manager;
     }
 
