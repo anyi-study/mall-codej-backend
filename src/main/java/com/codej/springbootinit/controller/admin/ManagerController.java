@@ -233,7 +233,7 @@ public class ManagerController {
             @RequestParam("status") Integer status,
             @RequestParam(value = "avatar", required = false) String avatar) {
 
-//        参数校验及身份验证
+        //参数校验及身份验证
         if (username == null || password == null || roleId == null || status == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

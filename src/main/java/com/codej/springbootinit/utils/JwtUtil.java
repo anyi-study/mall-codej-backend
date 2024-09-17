@@ -10,7 +10,7 @@ import java.util.Map;
 public class JwtUtil {
 
     // 秘钥，应该存放在安全的地方
-    private static final String SECRET_KEY = "your_secret_key";
+    private static final String SECRET_KEY = "codej666";
 
     // 生成JWT
     public static String generateToken(String username) {
@@ -21,7 +21,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10小时有效期
+                .setExpiration(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L)) // 10小时有效期
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
