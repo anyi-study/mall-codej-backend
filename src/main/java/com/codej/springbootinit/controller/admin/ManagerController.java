@@ -2,7 +2,6 @@ package com.codej.springbootinit.controller.admin;
 
 import com.codej.springbootinit.common.BaseResponse;
 import com.codej.springbootinit.common.ErrorCode;
-import com.codej.springbootinit.common.PageResponse;
 import com.codej.springbootinit.common.ResultUtils;
 import com.codej.springbootinit.exception.BusinessException;
 import com.codej.springbootinit.model.dto.manager.AdminLoginRequest;
@@ -10,7 +9,6 @@ import com.codej.springbootinit.model.dto.manager.ManagerRegisterRequest;
 import com.codej.springbootinit.model.dto.manager.UpdateManagerRequest;
 import com.codej.springbootinit.model.dto.manager.UpdatePasswordManager;
 import com.codej.springbootinit.model.entity.Manager;
-import com.codej.springbootinit.model.entity.ManagerPageResponse;
 import com.codej.springbootinit.model.vo.ManagerPageVo;
 import com.codej.springbootinit.model.vo.ManagerVO;
 import com.codej.springbootinit.model.vo.UserPermissionsResponse;
