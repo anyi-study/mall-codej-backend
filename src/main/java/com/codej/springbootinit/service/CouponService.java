@@ -50,7 +50,7 @@ public interface CouponService extends IService<Coupon> {
      * @param limit
      * @return
      */
-    CouponPageVo getSkusList(Integer page, Integer limit);
+    CouponPageVo getUserLevelList(Integer page, Integer limit);
 
     /**
      * 删除优惠券

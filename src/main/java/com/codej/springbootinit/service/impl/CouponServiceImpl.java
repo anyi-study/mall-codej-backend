@@ -96,12 +96,12 @@ public class CouponServiceImpl extends ServiceImpl<CouponMapper, Coupon>
     }
 
     @Override
-    public CouponPageVo getSkusList(Integer page, Integer limit) {
+    public CouponPageVo getUserLevelList(Integer page, Integer limit) {
         // 调用MyBatis-Plus进行分页查询
         // 示例代码，具体实现需要根据实际数据库和业务逻辑调整
-        Page<Coupon> managerPage = new Page<>(page, limit);
+        Page<Coupon> couponPage = new Page<>(page, limit);
         LambdaQueryWrapper<Coupon> queryWrapper = new LambdaQueryWrapper<>();
-        IPage<Coupon> result = couponMapper.selectPage(managerPage, queryWrapper);
+        IPage<Coupon> result = couponMapper.selectPage(couponPage, queryWrapper);
         // 返回分页数据
         return new CouponPageVo(result.getRecords(), result.getTotal());
     }

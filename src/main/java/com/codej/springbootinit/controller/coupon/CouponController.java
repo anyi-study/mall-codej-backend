@@ -6,7 +6,7 @@ import com.codej.springbootinit.common.ResultUtils;
 import com.codej.springbootinit.exception.BusinessException;
 import com.codej.springbootinit.model.entity.coupon.Coupon;
 import com.codej.springbootinit.model.vo.CouponPageVo;
-import com.codej.springbootinit.model.vo.SkusPageVo;
+import com.codej.springbootinit.model.vo.UserLevelPageVo;
 import com.codej.springbootinit.service.CouponService;
 import com.codej.springbootinit.utils.JwtUtil;
 import io.swagger.annotations.Api;
@@ -86,7 +86,7 @@ public class CouponController {
 
     @ApiOperation("获取优惠券列表")
     @GetMapping("/{page}")
-    public BaseResponse<CouponPageVo> getSkusList(@RequestHeader(value = "token") String token,
+    public BaseResponse<CouponPageVo> getUserLevelList(@RequestHeader(value = "token") String token,
                                                   @PathVariable("page") Integer page,
                                                   @RequestParam(value = "limit", defaultValue = "10") Integer limit) {
 
@@ -101,7 +101,7 @@ public class CouponController {
         }
 
         // 调用服务层方法获取分页数据
-        CouponPageVo couponPageVo = couponService.getSkusList(page, limit);
+        CouponPageVo couponPageVo = couponService.getUserLevelList(page, limit);
 
         // 返回成功响应
         return ResultUtils.success(couponPageVo);
