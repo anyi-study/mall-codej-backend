@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="UserLevel" />
-                  <option name="tableName" value="user_level" />
+                  <option name="className" value="OrderItem" />
+                  <option name="tableName" value="order_item" />
                 </TableUIInfo>
               </list>
             </option>

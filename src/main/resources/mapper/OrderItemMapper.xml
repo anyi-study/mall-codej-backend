@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codej.springbootinit.mapper.OrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.codej.springbootinit.model.entity.orders.OrderItem">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="num" column="num" jdbcType="INTEGER"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="rating" column="rating" jdbcType="INTEGER"/>
+            <result property="review" column="review" jdbcType="VARCHAR"/>
+            <result property="reviewTime" column="review_time" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="INTEGER"/>
+            <result property="skusType" column="skus_type" jdbcType="TINYINT"/>
+            <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+            <result property="goodsNum" column="goods_num" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="extra" column="extra" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,shop_id,
+        num,price,rating,
+        review,review_time,create_time,
+        skus_type,goods_id,goods_num,
+        user_id,extra,status
+    </sql>
+</mapper>
